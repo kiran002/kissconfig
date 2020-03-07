@@ -8,11 +8,7 @@ import scala.reflect.runtime.{universe => ru}
 
 object Helper {
 
-  def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
-
-  def classAccessors[T: TypeTag] = typeOf[T].members.sorted.collect {
-    case m: MethodSymbol if m.isCaseAccessor => (m.name.toString, m.returnType)
-  }
+  def classAccessors[T: TypeTag]: List[(String, ru.Type)] =  getListOfFields(typeOf[T])
 
   def get(config: Config,
           tuplesOfFields: List[(String, ru.Type)],
@@ -31,14 +27,15 @@ object Helper {
       val classSymbol = nameTypeTuple._2.typeSymbol.asClass
       p.func.isDefinedAt(nameTypeTuple) match {
         case true => p.func(nameTypeTuple)
-        case false if classSymbol.isCaseClass => // must be custom type, if subclass of product
-          val tupleOfFields = nameTypeTuple._2.members.sorted.collect {
-            case m: MethodSymbol if m.isCaseAccessor =>
-              (m.name.toString, m.returnType)
-          }
+        case false if classSymbol.isCaseClass => // must be custom type
+          val tupleOfFields = getListOfFields(nameTypeTuple._2)
           this.get(config.getConfig(nameTypeTuple._1), tupleOfFields, classSymbol, nameTypeTuple._2)
       }
     }
     constructorMirror(seqOfConfigValues: _*)
+  }
+
+  private def getListOfFields(ip:ru.Type) = ip.members.sorted.collect {
+    case m: MethodSymbol if m.isCaseAccessor =>              (m.name.toString, m.returnType)
   }
 }
