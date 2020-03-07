@@ -7,21 +7,19 @@ import scala.reflect.runtime.{universe => ru}
 
 object Helper {
 
-  def get(config: Config,
-          classSymbol: ru.ClassSymbol,
-          classType: ru.Type): Any = {
+  def get(config: Config, classSymbol: ru.ClassSymbol, classType: ru.Type): Any = {
     val tuplesOfFields = getListOfFields(classType)
     val runtimeMirror = ru.runtimeMirror(getClass.getClassLoader)
     val classMirror = runtimeMirror.reflectClass(classSymbol)
     val constructorSymbol = classType.decl(ru.termNames.CONSTRUCTOR).asMethod
     val constructorMirror = classMirror.reflectConstructor(constructorSymbol)
 
-    val p = new TypeHelper(config)
+    val partFunc = new TypeHelper(config).func
 
     val seqOfConfigValues = tuplesOfFields.map { nameTypeTuple =>
       val classSymbol = nameTypeTuple._2.typeSymbol.asClass
-      p.func.isDefinedAt(nameTypeTuple) match {
-        case true => p.func(nameTypeTuple)
+      partFunc.isDefinedAt(nameTypeTuple) match {
+        case true => partFunc(nameTypeTuple)
         case false if classSymbol.isCaseClass => // must be custom type
           this.get(config.getConfig(nameTypeTuple._1), classSymbol, nameTypeTuple._2)
       }
