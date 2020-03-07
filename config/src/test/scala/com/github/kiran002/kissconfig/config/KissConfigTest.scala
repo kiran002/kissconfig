@@ -13,14 +13,25 @@ case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
 class KissConfigTest extends AnyFlatSpec {
 
   private val config = ConfigFactory.defaultApplication()
-  private val appConfig = KissConfig.get[PrimaryTypes](config)
+  private val ptConfig = KissConfig.get[PrimaryTypes](config)
+  private val lmConfig = KissConfig.get[ListsMaps](config)
+  private val ctConfig = KissConfig.get[CustomTypes](config)
 
   "KissConfig " should " be able to extract Primitives (Integers,Booleans)" in {
-    assert(appConfig.myInt == 5)
-    assert(appConfig.myBoolean)
+    assert(ptConfig.myInt == 5)
+    assert(ptConfig.myBoolean)
   }
-  "It" should "be able to extract strings" in {
-    assert(appConfig.myString.equals("myString"))
+  it should "be able to extract strings" in {
+    assert(ptConfig.myString.equals("myString"))
+  }
+  it should "be able to extract lists and maintain order" in {
+    assert(lmConfig.lists.size == 3)
+    assert(lmConfig.lists.head.equals("1"))
+    assert(lmConfig.lists.last.equals("3"))
   }
 
+  it should "be able to extract maps" in {
+    val tmp = Map("key1" -> "val1", "key2" -> "val2")
+    assert(lmConfig.map.equals(tmp))
+  }
 }
