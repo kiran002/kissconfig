@@ -18,8 +18,9 @@ object Helper {
 
     val seqOfConfigValues = tuplesOfFields.map { nameTypeTuple =>
       val classSymbol = nameTypeTuple._2.typeSymbol.asClass
-      partFunc.isDefinedAt(nameTypeTuple) match {
-        case true => partFunc(nameTypeTuple)
+      val tTup = (nameTypeTuple._1,nameTypeTuple._2.typeSymbol,nameTypeTuple._2)
+      partFunc.isDefinedAt(tTup) match {
+        case true => partFunc(tTup)
         case false if classSymbol.isCaseClass => // must be custom type
           this.get(config.getConfig(nameTypeTuple._1), classSymbol, nameTypeTuple._2)
       }
