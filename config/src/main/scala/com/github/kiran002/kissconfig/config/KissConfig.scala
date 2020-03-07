@@ -7,14 +7,12 @@ import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
 
 
-class KissConfig[T: TypeTag](config: Config) {
 
-  private val tr: List[(String, ru.Type)] = Helper.classAccessors[T]
+object KissConfig {
 
-  private val runtimeMirror = ru.runtimeMirror(getClass.getClassLoader)
-  private val appConfig = ru.typeOf[T].typeSymbol.asClass
-
-  def get: T = Helper.get(config, tr, appConfig, ru.typeOf[T]).asInstanceOf[T]
-
-
+  def get[T: TypeTag](config: Config):T = {
+    val tuplesOfFields: List[(String, ru.Type)] = Helper.classAccessors[T]
+    val appConfig = ru.typeOf[T].typeSymbol.asClass
+    Helper.get(config, tuplesOfFields, appConfig, ru.typeOf[T]).asInstanceOf[T]
+  }
 }

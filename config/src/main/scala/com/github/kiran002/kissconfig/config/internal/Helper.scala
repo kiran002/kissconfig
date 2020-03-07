@@ -15,58 +15,46 @@ object Helper {
   }
 
   def get(config: Config,
-          tr: List[(String, ru.Type)],
-          clz: ru.ClassSymbol,
-          rt: ru.Type): Any = {
+          tuplesOfFields: List[(String, ru.Type)],
+          classSymbol: ru.ClassSymbol,
+          classType: ru.Type): Any = {
 
-    val m = ru.runtimeMirror(getClass.getClassLoader)
-    val cm = m.reflectClass(clz)
-    val ctor = rt.decl(ru.termNames.CONSTRUCTOR).asMethod
-    val ctorm = cm.reflectConstructor(ctor)
-
-    val bool = ru.typeOf[Boolean].resultType
-    val in = ru.typeOf[Int].resultType
-    val st = ru.typeOf[String].resultType
-    val ls = ru.typeOf[List[String]].resultType
-    val ops = ru.typeOf[Option[String]].resultType
-    val ops2 = ru.typeOf[Option[_]].resultType
-    val ms = ru.typeOf[Map[String, Any]].resultType
-    val mss = ru.typeOf[Map[String, String]].resultType
+    val runtimeMirror = ru.runtimeMirror(getClass.getClassLoader)
+    val classMirror = runtimeMirror.reflectClass(classSymbol)
+    val constructorSymbol = classType.decl(ru.termNames.CONSTRUCTOR).asMethod
+    val constructorMirror = classMirror.reflectConstructor(constructorSymbol)
+    //Primary types
+    val booleanType = ru.typeOf[Boolean].resultType
+    val integerType = ru.typeOf[Int].resultType
+    val stringType = ru.typeOf[String].resultType
+    //List types
+    val listOfStringType = ru.typeOf[List[String]].resultType
+    //Optional type
+    val optionalStringType = ru.typeOf[Option[String]].resultType
+    //Map types
+    val mapOfStringToAny = ru.typeOf[Map[String, Any]].resultType
+    val mapOfStringToString = ru.typeOf[Map[String, String]].resultType
 
 
     import scala.collection.JavaConverters._
 
-    val t = tr.map { x =>
+    val seqOfConfigValues = tuplesOfFields.map { nameTypeTuple =>
 
-      val h = x._2.typeSymbol.asClass
-      val cm = m.reflectClass(h)
-      x._2.typeSymbol
-      val typ = Option(x._2.typeArgs)
+      val classSymbol = nameTypeTuple._2.typeSymbol.asClass
 
-
-      val co = x._2.typeSymbol
-
-
-      println(typ, x._2.typeSymbol, x._2.termSymbol, h.isPrimitive)
-
-      x._2 match {
-        case `bool` => config.getBoolean(x._1)
-        case `in` => config.getInt(x._1)
-        case `st` => config.getString(x._1)
-        case `ls` => config.getStringList(x._1).asScala.toList
-        case `ops2` => scala.util.Try(config.getString(x._1)).toOption
-        case `ops` => scala.util.Try(config.getString(x._1)).toOption
-        case `ms` =>
-          config
-            .getConfig(x._1)
-            .entrySet()
-            .asScala
-            .map { x =>
-              x.getKey -> x.getValue.unwrapped().asInstanceOf[Any]
-            }
-            .toMap
-        case `mss` =>
-          val temp = config.getConfig(x._1)
+      nameTypeTuple._2 match {
+        case `booleanType` => config.getBoolean(nameTypeTuple._1)
+        case `integerType` => config.getInt(nameTypeTuple._1)
+        case `stringType` => config.getString(nameTypeTuple._1)
+        case `listOfStringType` => config.getStringList(nameTypeTuple._1).asScala.toList
+        case `optionalStringType` => scala.util.Try(config.getString(nameTypeTuple._1)).toOption
+        case `mapOfStringToAny` =>
+          config.getConfig(nameTypeTuple._1).entrySet().asScala
+            .map { entry =>
+              entry.getKey -> entry.getValue.unwrapped().asInstanceOf[Any]
+            }.toMap
+        case `mapOfStringToString` =>
+          val temp = config.getConfig(nameTypeTuple._1)
           temp
             .entrySet()
             .asScala
@@ -75,19 +63,14 @@ object Helper {
             }
             .toMap
 
-        case o if h.isCaseClass => // must be custom type, if subclass of product
-          val rr = o.members.sorted.collect {
+        case o if classSymbol.isCaseClass => // must be custom type, if subclass of product
+          val tupleOfFields = o.members.sorted.collect {
             case m: MethodSymbol if m.isCaseAccessor =>
               (m.name.toString, m.returnType)
           }
-
-          val ctor = o.decl(ru.termNames.CONSTRUCTOR).asMethod
-          val ctorm = cm.reflectConstructor(ctor)
-          val config2 = config.getConfig(x._1)
-          this.get(config2, rr, h, o)
+          this.get(config.getConfig(nameTypeTuple._1), tupleOfFields, classSymbol, o)
       }
     }
-    //    println(t)
-    ctorm(t: _*)
+    constructorMirror(seqOfConfigValues: _*)
   }
 }
