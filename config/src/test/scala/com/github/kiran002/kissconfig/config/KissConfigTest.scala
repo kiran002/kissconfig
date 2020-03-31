@@ -5,18 +5,20 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 case class PrimaryTypes(myInt: Int, myString: String, myBoolean: Boolean)
 
-case class OptionalPrimaryTypes(myInt: Option[Int], myString: Option[String], myBoolean: Option[Boolean], nonExistent:Option[String])
+case class OptionalPrimaryTypes(myInt: Option[Int],
+                                myString: Option[String],
+                                myBoolean: Option[Boolean],
+                                nonExistent: Option[String])
 
 case class ListsMaps(lists: List[String], map: Map[String, String])
 
 case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
 
-
 class KissConfigTest extends AnyFlatSpec {
 
-  private val config = ConfigFactory.defaultApplication()
-  private val ptConfig = KissConfig.get[PrimaryTypes](config)
-  private val lmConfig = KissConfig.get[ListsMaps](config)
+  private val config    = ConfigFactory.defaultApplication()
+  private val ptConfig  = KissConfig.get[PrimaryTypes](config)
+  private val lmConfig  = KissConfig.get[ListsMaps](config)
   private val optConfig = KissConfig.get[OptionalPrimaryTypes](config)
 
   "KissConfig " should " be able to extract Primitives (Integers,Booleans)" in {

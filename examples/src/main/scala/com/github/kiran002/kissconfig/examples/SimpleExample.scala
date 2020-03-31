@@ -1,7 +1,13 @@
 package com.github.kiran002.kissconfig.examples
 
 import com.github.kiran002.kissconfig.config.KissConfig
-import com.github.kiran002.kissconfig.examples.models.{BooleanMaps, CustomTypes, Lists, ListsMaps, PrimaryTypes}
+import com.github.kiran002.kissconfig.examples.models.{
+  BooleanMaps,
+  CustomTypes,
+  Lists,
+  ListsMaps,
+  PrimaryTypes
+}
 import com.typesafe.config.ConfigFactory
 
 object SimpleExample extends App {
@@ -17,7 +23,7 @@ object SimpleExample extends App {
   println(s"My List : ${listsMaps.lists}")
   println(s"My Maps : ${listsMaps.map}")
 
-  val customTypes = KissConfig.get[CustomTypes](config)
+  val customTypes        = KissConfig.get[CustomTypes](config)
   val nestedPrimaryTypes = customTypes.pt
   println(s"Nested My Integer : ${nestedPrimaryTypes.myInt}")
   println(s"Nested My String : ${nestedPrimaryTypes.myString}")
@@ -32,5 +38,7 @@ object SimpleExample extends App {
 
   val lis = KissConfig.get[Lists](config)
   println(s"Lists of Double : ${lis.listsDouble}")
+  println(s"Sum of Double : ${lis.listsDouble.sum}")
   println(s"Lists of Int : ${lis.listsInt}")
+  println(s"Max of Int : ${lis.listsInt.max}")
 }
