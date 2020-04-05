@@ -19,9 +19,11 @@ object KissConfig {
   TypeHelper.register(new BasicTypeHelper)
   TypeHelper.register(new OptionalTypeHelper)
   TypeHelper.register(new CollectionTypeHelper)
-  TypeHelper.register(new CaseClassTypeHelper)
 
-  def get[T: TypeTag](config: Config): T = {
+  def get[T: TypeTag](config: Config, resolutionStrategy: Option[String => String] = None): T = {
+
+    TypeHelper.register(new CaseClassTypeHelper(resolutionStrategy))
+
     Try {
       TypeHelper.get
         .filter(x => x.canHandle(ru.typeOf[T]))

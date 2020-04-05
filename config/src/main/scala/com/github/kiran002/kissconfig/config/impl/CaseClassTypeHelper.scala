@@ -8,7 +8,7 @@ import scala.reflect.runtime.universe
 import scala.reflect.runtime.universe._
 import scala.util.{Success, Try}
 
-class CaseClassTypeHelper extends TypeHelper {
+class CaseClassTypeHelper(resolutionStrategy: Option[(String => String)]) extends TypeHelper {
 
   override def canHandle(objType: universe.Type): Boolean =
     Try(objType.typeSymbol.asClass.isCaseClass).getOrElse(false)
@@ -29,7 +29,9 @@ class CaseClassTypeHelper extends TypeHelper {
             .head
         } match {
           case Success(value) =>
-            value.get(nameTypeTuple.typ)(config, Some(nameTypeTuple.name))
+            val default = (s: String) => s
+            val func    = resolutionStrategy.getOrElse(default)
+            value.get(nameTypeTuple.typ)(config, Some(func(nameTypeTuple.name)))
         }
       }
       constructorMirror(seqOfConfigValues: _*)

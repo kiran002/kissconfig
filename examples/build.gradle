@@ -12,5 +12,4 @@ dependencies {
     compile 'org.scala-lang:scala-library:2.12.4'
     compile group: 'com.typesafe', name: 'config', version: '1.4.0'
     implementation project(":config")
-
 }
