@@ -1,6 +1,6 @@
 package com.github.kiran002.kissconfig.config.impl
 
-import com.github.kiran002.kissconfig.config.api.TypeHelper
+import com.github.kiran002.kissconfig.config.api.{ResolutionStrategy, TypeHelper}
 import com.github.kiran002.kissconfig.config.models.FieldInfo
 import com.typesafe.config.Config
 
@@ -8,7 +8,7 @@ import scala.reflect.runtime.universe
 import scala.reflect.runtime.universe._
 import scala.util.{Success, Try}
 
-class CaseClassTypeHelper(resolutionStrategy: Option[(String => String)]) extends TypeHelper {
+class CaseClassTypeHelper extends TypeHelper {
 
   override def canHandle(objType: universe.Type): Boolean =
     Try(objType.typeSymbol.asClass.isCaseClass).getOrElse(false)
@@ -29,9 +29,10 @@ class CaseClassTypeHelper(resolutionStrategy: Option[(String => String)]) extend
             .head
         } match {
           case Success(value) =>
-            val default = (s: String) => s
-            val func    = resolutionStrategy.getOrElse(default)
-            value.get(nameTypeTuple.typ)(config, Some(func(nameTypeTuple.name)))
+            val func = ResolutionStrategy.get
+            val key =
+              if (func.isDefined) func.get.resolve(nameTypeTuple.name) else nameTypeTuple.name
+            value.get(nameTypeTuple.typ)(config, Some(key))
         }
       }
       constructorMirror(seqOfConfigValues: _*)

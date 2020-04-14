@@ -1,6 +1,6 @@
 package com.github.kiran002.kissconfig.config
 
-import com.github.kiran002.kissconfig.config.api.TypeHelper
+import com.github.kiran002.kissconfig.config.api.{ResolutionStrategy, TypeHelper}
 import com.github.kiran002.kissconfig.config.impl.{
   BasicTypeHelper,
   CaseClassTypeHelper,
@@ -19,11 +19,10 @@ object KissConfig {
   TypeHelper.register(new BasicTypeHelper)
   TypeHelper.register(new OptionalTypeHelper)
   TypeHelper.register(new CollectionTypeHelper)
+  TypeHelper.register(new CaseClassTypeHelper)
 
-  def get[T: TypeTag](config: Config, resolutionStrategy: Option[String => String] = None): T = {
-
-    TypeHelper.register(new CaseClassTypeHelper(resolutionStrategy))
-
+  def get[T: TypeTag](config: Config, resolutionStrategy: Option[ResolutionStrategy] = None): T = {
+    ResolutionStrategy.register(resolutionStrategy)
     Try {
       TypeHelper.get
         .filter(x => x.canHandle(ru.typeOf[T]))
