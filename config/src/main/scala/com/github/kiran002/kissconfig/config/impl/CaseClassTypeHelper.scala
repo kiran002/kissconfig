@@ -1,20 +1,34 @@
 package com.github.kiran002.kissconfig.config.impl
 
 import com.github.kiran002.kissconfig.config.api.{ResolutionStrategy, TypeHelper}
-import com.github.kiran002.kissconfig.config.models.FieldInfo
-import com.typesafe.config.Config
+import com.github.kiran002.kissconfig.config.models.{FieldInfo, Input}
 
 import scala.reflect.runtime.universe
 import scala.reflect.runtime.universe._
 import scala.util.{Success, Try}
 
+/**
+  * [[CaseClassTypeHelper]] helps extract and populate case classes
+  */
 class CaseClassTypeHelper extends TypeHelper {
 
+  /**
+    *
+    * @param objType: type of the object
+    * @return : true if it can handle [[objType]] false otherwise
+    */
   override def canHandle(objType: universe.Type): Boolean =
     Try(objType.typeSymbol.asClass.isCaseClass).getOrElse(false)
 
-  override def get(objType: universe.Type): (Config, Option[String]) => Any = { (h, j) =>
+  /**
+    *
+    * @param objType  type of the object
+    * @return : function, that takes config object and config key as input and returns the extracted value
+    */
+  override def get(objType: universe.Type): Input => Any = { ip =>
     {
+      val h                 = ip.config
+      val j                 = ip.configKey
       val config            = if (j.isDefined) h.getConfig(j.get) else h
       val tuplesOfFields    = getListOfFields(objType)
       val runtimeMirror     = universe.runtimeMirror(getClass.getClassLoader)
@@ -32,14 +46,20 @@ class CaseClassTypeHelper extends TypeHelper {
             val func = ResolutionStrategy.get
             val key =
               if (func.isDefined) func.get.resolve(nameTypeTuple.name) else nameTypeTuple.name
-            value.get(nameTypeTuple.typ)(config, Some(key))
+            val tot = Input(config, Some(key))
+            value.get(nameTypeTuple.typ)(tot)
         }
       }
       constructorMirror(seqOfConfigValues: _*)
     }
   }
 
-  def getListOfFields(ip: universe.Type): List[FieldInfo] =
+  /**
+    *  Returns a list of fields for a case class
+    * @param ip: Input case class [[scala.reflect.runtime.universe.Type]]
+    * @return list of sorted fields (exactly as defined in the case class definition
+    */
+  private def getListOfFields(ip: universe.Type): List[FieldInfo] =
     ip.members.sorted.collect {
       case m: MethodSymbol if m.isCaseAccessor =>
         FieldInfo(m.name.toString, m.returnType)

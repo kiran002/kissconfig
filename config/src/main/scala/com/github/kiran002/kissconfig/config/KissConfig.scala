@@ -8,6 +8,7 @@ import com.github.kiran002.kissconfig.config.impl.{
   OptionalTypeHelper
 }
 import com.github.kiran002.kissconfig.config.internal.KissConfigException
+import com.github.kiran002.kissconfig.config.models.Input
 import com.typesafe.config.Config
 
 import scala.reflect.runtime.universe._
@@ -30,9 +31,14 @@ class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] 
         .head
     } match {
       case Success(value) =>
-        value.get(ru.typeOf[T])(config, None).asInstanceOf[T]
+        value.get(ru.typeOf[T])(Input(config, None)).asInstanceOf[T]
       case Failure(exception) =>
         throw KissConfigException(s"Type(${ru.typeOf[T]} currently not supported", exception)
     }
   }
+}
+object KissConfig {
+
+  def get[T] = ru.typeOf[T]
+
 }

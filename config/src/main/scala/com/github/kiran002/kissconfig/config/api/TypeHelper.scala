@@ -1,6 +1,6 @@
 package com.github.kiran002.kissconfig.config.api
 
-import com.typesafe.config.Config
+import com.github.kiran002.kissconfig.config.models.Input
 
 import scala.collection.mutable.ListBuffer
 import scala.reflect.runtime.universe.Type
@@ -19,11 +19,16 @@ trait TypeHelper {
   /**
     *  Is the typehelper able to handle this particular type ([[objType]])
     * @param objType: type of the object
-    * @return : function, that takes config object and config key as input and returns the extracted value
+    * @return : true if it can handle [[objType]] false otherwise
     */
   def canHandle(objType: Type): Boolean
 
-  def get(objType: Type): (Config, Option[String]) => Any
+  /**
+    *
+    * @param objType  type of the object
+    * @return : function, that takes config object and config key as input and returns the extracted value
+    */
+  def get(objType: Type): Input => Any
 
 }
 
