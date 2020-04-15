@@ -1,29 +1,23 @@
-package com.github.kiran002.kissconfig.examples
+package com.github.kiran002.kc.examples
 
 import com.github.kiran002.kissconfig.config.KissConfig
-import com.github.kiran002.kissconfig.examples.models.{
-  BooleanMaps,
-  CustomTypes,
-  Lists,
-  ListsMaps,
-  PrimaryTypes
-}
+import com.github.kiran002.kissconfig.examples.models._
 import com.typesafe.config.ConfigFactory
 
 object SimpleExample extends App {
 
   private val config = ConfigFactory.defaultApplication()
-
-  val primaryTypes = KissConfig.get[PrimaryTypes](config)
+  private val kc     = new KissConfig(config)
+  val primaryTypes   = kc.get[PrimaryTypes]
   println(s"My Integer : ${primaryTypes.myInt}")
   println(s"My String : ${primaryTypes.myString}")
   println(s"My Boolean : ${primaryTypes.myBoolean}")
 
-  val listsMaps = KissConfig.get[ListsMaps](config)
+  val listsMaps = kc.get[ListsMaps]
   println(s"My List : ${listsMaps.lists}")
   println(s"My Maps : ${listsMaps.map}")
 
-  val customTypes        = KissConfig.get[CustomTypes](config)
+  val customTypes        = kc.get[CustomTypes]
   val nestedPrimaryTypes = customTypes.pt
   println(s"Nested My Integer : ${nestedPrimaryTypes.myInt}")
   println(s"Nested My String : ${nestedPrimaryTypes.myString}")
@@ -33,10 +27,10 @@ object SimpleExample extends App {
   println(s"Nested My List : ${nestedListsMaps.lists}")
   println(s"Nested My Maps : ${nestedListsMaps.map}")
 
-  val booleanMaps = KissConfig.get[BooleanMaps](config)
+  val booleanMaps = kc.get[BooleanMaps]
   println(s"Maps of Booleans: ${booleanMaps.ma}")
 
-  val lis = KissConfig.get[Lists](config)
+  val lis = kc.get[Lists]
   println(s"Lists of Double : ${lis.listsDouble}")
   println(s"Sum of Double : ${lis.listsDouble.sum}")
   println(s"Lists of Int : ${lis.listsInt}")
