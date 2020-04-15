@@ -14,15 +14,16 @@ import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
 import scala.util.{Failure, Success, Try}
 
-object KissConfig {
+class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] = None) {
 
   TypeHelper.register(new BasicTypeHelper)
   TypeHelper.register(new OptionalTypeHelper)
   TypeHelper.register(new CollectionTypeHelper)
   TypeHelper.register(new CaseClassTypeHelper)
 
-  def get[T: TypeTag](config: Config, resolutionStrategy: Option[ResolutionStrategy] = None): T = {
-    ResolutionStrategy.register(resolutionStrategy)
+  ResolutionStrategy.register(resolutionStrategy)
+
+  def get[T: TypeTag]: T = {
     Try {
       TypeHelper.get
         .filter(x => x.canHandle(ru.typeOf[T]))

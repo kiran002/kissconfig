@@ -1,6 +1,5 @@
 package com.github.kiran002.kissconfig.config
 
-import com.github.kiran002.kissconfig.config.api.ResolutionStrategy
 import com.github.kiran002.kissconfig.config.impl.ResolutionStrategies
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
@@ -20,17 +19,17 @@ case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
 
 class KissConfigTest extends AnyFlatSpec {
 
-  private val config    = ConfigFactory.defaultApplication()
-  private val ptConfig  = KissConfig.get[PrimaryTypes](config)
-  private val lmConfig  = KissConfig.get[ListsMaps](config)
-  private val optConfig = KissConfig.get[OptionalPrimaryTypes](config)
-
-  private val camelCaseToUnderScore = ResolutionStrategies.CamelCaseToUnderScore()
-  private val underScoreToCamelCase = ResolutionStrategies.UnderScoreToCamelCase()
+  private val camelCaseToUnderScore = Option(ResolutionStrategies.CamelCaseToUnderScore())
+  private val underScoreToCamelCase = Option(ResolutionStrategies.UnderScoreToCamelCase())
+  private val config                = ConfigFactory.defaultApplication()
+  private val kc                    = new KissConfig(config)
+  private val ptConfig              = kc.get[PrimaryTypes]
+  private val lmConfig              = kc.get[ListsMaps]
+  private val optConfig             = kc.get[OptionalPrimaryTypes]
   private val ptWithResolutionStrategy =
-    KissConfig.get[PrimaryTypes](config.getConfig("underscore"), Some(camelCaseToUnderScore))
+    new KissConfig(config.getConfig("underscore"), camelCaseToUnderScore).get[PrimaryTypes]
   private val ptWithResolutionStrategy2 =
-    KissConfig.get[PrimaryTypesU](config.getConfig("camelcase"), Some(underScoreToCamelCase))
+    new KissConfig(config.getConfig("camelcase"), underScoreToCamelCase).get[PrimaryTypesU]
 
   "KissConfig " should " be able to extract Primitives (Integers,Booleans)" in {
     assert(ptConfig.myInt == 5)
