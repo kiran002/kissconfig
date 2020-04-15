@@ -1,4 +1,4 @@
-package com.github.kiran002.kc.examples
+package com.github.kiran002.kissconfig.examples
 
 import com.github.kiran002.kissconfig.config.KissConfig
 import com.github.kiran002.kissconfig.examples.models._
