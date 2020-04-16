@@ -4,29 +4,33 @@ import com.github.kiran002.kissconfig.config.api.{ResolutionStrategy, TypeHelper
 import com.github.kiran002.kissconfig.config.models.Input
 import com.github.kiran002.kissconfig.config.{KissConfig, PrimaryTypes}
 import com.typesafe.config.ConfigFactory
+import org.scalatest.BeforeAndAfter
 import org.scalatest.flatspec.AnyFlatSpec
 
-class OptionalTypeHelperTest extends AnyFlatSpec {
+class OptionalTypeHelperTest extends AnyFlatSpec with BeforeAndAfter {
 
   private val bth = new OptionalTypeHelper()
 
-  TypeHelper.register(new BasicTypeHelper)
-  TypeHelper.register(new CollectionTypeHelper)
-  TypeHelper.register(new CaseClassTypeHelper)
+  before {
+    TypeHelper.register(new BasicTypeHelper)
+    TypeHelper.register(new CollectionTypeHelper)
+    TypeHelper.register(new CaseClassTypeHelper)
+    ResolutionStrategy.register(None)
+  }
 
   private val intSymbol          = KissConfig.get[Int]
   private val stringSymbol       = KissConfig.get[String]
-  private val optionalListSymbol = KissConfig.get[List[String]]
+  private val optionalListSymbol = KissConfig.get[Option[List[String]]]
   private val optionalString     = KissConfig.get[Option[String]]
   private val optionalCase       = KissConfig.get[Option[PrimaryTypes]]
 
-  "BasicTypeHelper" should " not handle Int/String/Boolean" in {
+  "OptionalTypeHelper" should " not handle Int/String/Boolean" in {
     assert(!bth.canHandle(intSymbol))
     assert(!bth.canHandle(stringSymbol))
 
   }
 
-  it should "not handle List[String]" in {
+  it should " handle optionalString and optionalListSymbol" in {
     assert(bth.canHandle(optionalListSymbol))
     assert(bth.canHandle(optionalString))
   }
@@ -57,7 +61,7 @@ class OptionalTypeHelperTest extends AnyFlatSpec {
 
   it should "extract case classes properly" in {
     val config = ConfigFactory.defaultApplication()
-    ResolutionStrategy.register(None)
+
     val optic = bth
       .get(optionalCase)(Input(config, Some("pt")))
       .asInstanceOf[Option[PrimaryTypes]]

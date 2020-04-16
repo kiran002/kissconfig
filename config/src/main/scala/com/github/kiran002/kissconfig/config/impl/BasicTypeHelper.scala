@@ -23,15 +23,15 @@ class BasicTypeHelper extends TypeHelper {
     )
 
   /**
-    *
+    * Is the typehelper able to handle this particular type ([[objType]])
     * @param objType: type of the object
-    * @return : true if it can handle objType false otherwise
+    * @return : true if it can handle [[objType]] false otherwise
     */
   override def canHandle(objType: universe.Type): Boolean =
     symbolToFunction.contains(objType.typeSymbol)
 
   /**
-    *
+    * Returns a function that can be used to extract values compatible with objType
     * @param objType  type of the object
     * @return : function, that takes config object and config key as input and returns the extracted value
     */

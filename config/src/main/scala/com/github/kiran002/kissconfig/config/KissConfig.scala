@@ -39,6 +39,6 @@ class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] 
 }
 object KissConfig {
 
-  def get[T] = ru.typeOf[T]
+  def get[T: TypeTag] = ru.typeOf[T]
 
 }

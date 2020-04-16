@@ -1,11 +1,12 @@
 package com.github.kiran002.kissconfig.config.impl
 
 import com.github.kiran002.kissconfig.config.api.{ResolutionStrategy, TypeHelper}
+import com.github.kiran002.kissconfig.config.internal.KissConfigException
 import com.github.kiran002.kissconfig.config.models.{FieldInfo, Input}
 
 import scala.reflect.runtime.universe
 import scala.reflect.runtime.universe._
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
 
 /**
   * [[CaseClassTypeHelper]] helps extract and populate case classes
@@ -13,7 +14,7 @@ import scala.util.{Success, Try}
 class CaseClassTypeHelper extends TypeHelper {
 
   /**
-    *
+    * Is the typehelper able to handle this particular type ([[objType]])
     * @param objType: type of the object
     * @return : true if it can handle [[objType]] false otherwise
     */
@@ -21,7 +22,7 @@ class CaseClassTypeHelper extends TypeHelper {
     Try(objType.typeSymbol.asClass.isCaseClass).getOrElse(false)
 
   /**
-    *
+    * Returns a function that can be used to extract values compatible with objType
     * @param objType  type of the object
     * @return : function, that takes config object and config key as input and returns the extracted value
     */
@@ -48,6 +49,8 @@ class CaseClassTypeHelper extends TypeHelper {
               if (func.isDefined) func.get.resolve(nameTypeTuple.name) else nameTypeTuple.name
             val tot = Input(config, Some(key))
             value.get(nameTypeTuple.typ)(tot)
+          case Failure(exception) =>
+            throw KissConfigException(s"No TypeHelper defined for $nameTypeTuple", exception)
         }
       }
       constructorMirror(seqOfConfigValues: _*)
@@ -55,7 +58,7 @@ class CaseClassTypeHelper extends TypeHelper {
   }
 
   /**
-    *  Returns a list of fields for a case class
+    * Returns a list of fields for a case class
     * @param ip: Input case class [[scala.reflect.runtime.universe.Type]]
     * @return list of sorted fields (exactly as defined in the case class definition
     */

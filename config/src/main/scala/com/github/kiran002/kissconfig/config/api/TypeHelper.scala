@@ -8,23 +8,37 @@ import scala.reflect.runtime.universe.Type
 /**
   * Interface used to define a [[TypeHelper]].
   *
-  *  Given a type (T), the TypeHelper is expected to be able
+  * Given a type (T), the TypeHelper is expected to be able
   *
   *      1. Extract configuration value from the config object
   *      2. Parse the value to the target type
   *
+  * @example
+  *   {{{
+  *   class StringTypeHelper extends TypeHelper {
+  *       private val stringExtractor: Input => Any  = x => x.config.getString(x.configKey.get)
+  *
+  *        override def canHandle(objType: universe.Type): Boolean =
+  *                      objType.typeSymbol==universe.typeOf[String].typeSymbol
+  *
+  *       override def get(objType: universe.Type): Input => Any = stringExtractor
+  *
+  *    }
+  *    }}}
+  *
+  * @note More example are available under [[com.github.kiran002.kissconfig.config.impl]]
   */
 trait TypeHelper {
 
   /**
-    *  Is the typehelper able to handle this particular type ([[objType]])
+    * Is the typehelper able to handle this particular type ([[objType]])
     * @param objType: type of the object
     * @return : true if it can handle [[objType]] false otherwise
     */
   def canHandle(objType: Type): Boolean
 
   /**
-    *
+    * Returns a function that can be used to extract values compatible with objType
     * @param objType  type of the object
     * @return : function, that takes config object and config key as input and returns the extracted value
     */
