@@ -59,7 +59,7 @@ object TypeHelper {
 
   /**
     * Register new [[TypeHelper]]
-    * @param typeHelper
+    * @param typeHelper: TypeHelper to register
     */
   def register(typeHelper: TypeHelper): Unit = {
     listBuffer += typeHelper
