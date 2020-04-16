@@ -66,8 +66,16 @@ object TypeHelper {
   }
 
   /**
-    * Get all registered TypeHelpers
-    * @return
+    * Get all registered TypeHelpers, every new registered type helper has higher precedence to all the older typehelpers.
+    * @example
+    *          If TypeHelperA and TypeHelperA1 can both handle type A and TypeHelperA is registered before TypeHelperA1
+    *          TypeHelperA1 will always be chosen over TypeHelperA for the type A
+    *
+    *
+    * @note This is not a bug, but a design decision to allow for users to override the type helpers provided by KissConfig.
+    *
+    *
+    * @return : list of all Registered [[TypeHelper]]'s in reverse order
     */
   def get: List[TypeHelper] = listBuffer.toList.reverse
 
