@@ -1,6 +1,6 @@
 package com.github.kiran002.kissconfig.config
 
-import com.github.kiran002.kissconfig.config.api.TypeHelper
+import com.github.kiran002.kissconfig.config.api.{ResolutionStrategy, TypeHelper}
 import com.github.kiran002.kissconfig.config.impl.{
   BasicTypeHelper,
   CaseClassTypeHelper,
@@ -8,31 +8,37 @@ import com.github.kiran002.kissconfig.config.impl.{
   OptionalTypeHelper
 }
 import com.github.kiran002.kissconfig.config.internal.KissConfigException
+import com.github.kiran002.kissconfig.config.models.Input
 import com.typesafe.config.Config
 
 import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
 import scala.util.{Failure, Success, Try}
 
-object KissConfig {
+class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] = None) {
 
   TypeHelper.register(new BasicTypeHelper)
   TypeHelper.register(new OptionalTypeHelper)
   TypeHelper.register(new CollectionTypeHelper)
+  TypeHelper.register(new CaseClassTypeHelper)
 
-  def get[T: TypeTag](config: Config, resolutionStrategy: Option[String => String] = None): T = {
+  ResolutionStrategy.register(resolutionStrategy)
 
-    TypeHelper.register(new CaseClassTypeHelper(resolutionStrategy))
-
+  def get[T: TypeTag]: T = {
     Try {
       TypeHelper.get
         .filter(x => x.canHandle(ru.typeOf[T]))
         .head
     } match {
       case Success(value) =>
-        value.get(ru.typeOf[T])(config, None).asInstanceOf[T]
+        value.get(ru.typeOf[T])(Input(config, None)).asInstanceOf[T]
       case Failure(exception) =>
         throw KissConfigException(s"Type(${ru.typeOf[T]} currently not supported", exception)
     }
   }
+}
+object KissConfig {
+
+  def get[T: TypeTag] = ru.typeOf[T]
+
 }

@@ -1,9 +1,12 @@
 package com.github.kiran002.kissconfig.config
 
+import com.github.kiran002.kissconfig.config.impl.ResolutionStrategies
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
 
 case class PrimaryTypes(myInt: Int, myString: String, myBoolean: Boolean)
+
+case class PrimaryTypesU(my_int: Int, my_string: String, my_boolean: Boolean)
 
 case class OptionalPrimaryTypes(myInt: Option[Int],
                                 myString: Option[String],
@@ -16,10 +19,17 @@ case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
 
 class KissConfigTest extends AnyFlatSpec {
 
-  private val config    = ConfigFactory.defaultApplication()
-  private val ptConfig  = KissConfig.get[PrimaryTypes](config)
-  private val lmConfig  = KissConfig.get[ListsMaps](config)
-  private val optConfig = KissConfig.get[OptionalPrimaryTypes](config)
+  private val camelCaseToUnderScore = Option(ResolutionStrategies.CamelCaseToUnderScore())
+  private val underScoreToCamelCase = Option(ResolutionStrategies.UnderScoreToCamelCase())
+  private val config                = ConfigFactory.defaultApplication()
+  private val kc                    = new KissConfig(config)
+  private val ptConfig              = kc.get[PrimaryTypes]
+  private val lmConfig              = kc.get[ListsMaps]
+  private val optConfig             = kc.get[OptionalPrimaryTypes]
+  private val ptWithResolutionStrategy =
+    new KissConfig(config.getConfig("underscore"), camelCaseToUnderScore).get[PrimaryTypes]
+  private val ptWithResolutionStrategy2 =
+    new KissConfig(config.getConfig("camelcase"), underScoreToCamelCase).get[PrimaryTypesU]
 
   "KissConfig " should " be able to extract Primitives (Integers,Booleans)" in {
     assert(ptConfig.myInt == 5)
@@ -47,5 +57,17 @@ class KissConfigTest extends AnyFlatSpec {
 
   it should " extract None, when config doesnt exist for an Optional Type" in {
     assert(optConfig.nonExistent.isEmpty)
+  }
+
+  it should " be able to resolve using CamelCaseToUnderScore Strategy" in {
+    assert(ptWithResolutionStrategy.myInt == 5)
+    assert(ptWithResolutionStrategy.myBoolean)
+    assert(ptWithResolutionStrategy.myString.equals("myString"))
+  }
+
+  it should " be able to resolve using UnderScoreToCamelCase Strategy" in {
+    assert(ptWithResolutionStrategy2.my_int == 5)
+    assert(ptWithResolutionStrategy2.my_boolean)
+    assert(ptWithResolutionStrategy2.my_string.equals("myString"))
   }
 }
