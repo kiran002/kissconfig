@@ -15,6 +15,11 @@ import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
 import scala.util.{Failure, Success, Try}
 
+/**
+  * KissConfig
+  * @param config: Input [[Config]] object, that acts as the source
+  * @param resolutionStrategy: Optional resolution strategy, which should be used. More information can be found here [[ResolutionStrategy]]
+  */
 class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] = None) {
 
   TypeHelper.register(new BasicTypeHelper)
@@ -24,21 +29,31 @@ class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] 
 
   ResolutionStrategy.register(resolutionStrategy)
 
-  def get[T: TypeTag]: T = {
+  /**
+    *
+    * @param key  : When the expect type is not a top level object in config, you can use key to extract a particular key and extract values
+    * @tparam T   : Type Param of the input class that should be populated with [[config]]
+    * @return     : Populated instance of type [[T]]
+    */
+  def get[T: TypeTag](key: Option[String] = None): T = {
     Try {
-      TypeHelper.get
-        .filter(x => x.canHandle(ru.typeOf[T]))
-        .head
+      TypeHelper.get.filter(_.canHandle(ru.typeOf[T])).head
     } match {
       case Success(value) =>
-        value.get(ru.typeOf[T])(Input(config, None)).asInstanceOf[T]
+        value.get(ru.typeOf[T])(Input(config, key)).asInstanceOf[T]
       case Failure(exception) =>
         throw KissConfigException(s"Type(${ru.typeOf[T]} currently not supported", exception)
     }
   }
+
 }
 object KissConfig {
 
-  def get[T: TypeTag] = ru.typeOf[T]
+  /**
+    * Wrapper around [[scala.reflect.runtime.universe]]'s typeOf method
+    * @tparam T: Input type parameter T
+    * @return : type of [[T]]
+    */
+  def get[T: TypeTag]: ru.Type = ru.typeOf[T]
 
 }

@@ -28,9 +28,7 @@ class CaseClassTypeHelper extends TypeHelper {
     */
   override def get(objType: universe.Type): Input => Any = { ip =>
     {
-      val h                 = ip.config
-      val j                 = ip.configKey
-      val config            = if (j.isDefined) h.getConfig(j.get) else h
+      val config            = if (ip.configKey.isDefined) ip.config.getConfig(ip.configKey.get) else ip.config
       val tuplesOfFields    = getListOfFields(objType)
       val runtimeMirror     = universe.runtimeMirror(getClass.getClassLoader)
       val classMirror       = runtimeMirror.reflectClass(objType.typeSymbol.asClass)
@@ -39,16 +37,14 @@ class CaseClassTypeHelper extends TypeHelper {
 
       val seqOfConfigValues = tuplesOfFields.map { nameTypeTuple =>
         Try {
-          TypeHelper.get
-            .filter(x => x.canHandle(nameTypeTuple.typ))
-            .head
+          TypeHelper.get.filter(_.canHandle(nameTypeTuple.typ)).head
         } match {
           case Success(value) =>
             val func = ResolutionStrategy.get
             val key =
               if (func.isDefined) func.get.resolve(nameTypeTuple.name) else nameTypeTuple.name
-            val tot = Input(config, Some(key))
-            value.get(nameTypeTuple.typ)(tot)
+            val input = Input(config, Some(key))
+            value.get(nameTypeTuple.typ)(input)
           case Failure(exception) =>
             throw KissConfigException(s"No TypeHelper defined for $nameTypeTuple", exception)
         }

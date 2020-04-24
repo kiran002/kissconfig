@@ -7,7 +7,7 @@ import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe
 
 /**
-  * [[CollectionTypeHelper]] helps extract collectins like maps, lists
+  * [[CollectionTypeHelper]] helps extract collections like maps, lists
   */
 class CollectionTypeHelper extends TypeHelper {
 

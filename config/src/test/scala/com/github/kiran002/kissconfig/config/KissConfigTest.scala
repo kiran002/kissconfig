@@ -23,13 +23,13 @@ class KissConfigTest extends AnyFlatSpec {
   private val underScoreToCamelCase = Option(ResolutionStrategies.UnderScoreToCamelCase())
   private val config                = ConfigFactory.defaultApplication()
   private val kc                    = new KissConfig(config)
-  private val ptConfig              = kc.get[PrimaryTypes]
-  private val lmConfig              = kc.get[ListsMaps]
-  private val optConfig             = kc.get[OptionalPrimaryTypes]
+  private val ptConfig              = kc.get[PrimaryTypes]()
+  private val lmConfig              = kc.get[ListsMaps]()
+  private val optConfig             = kc.get[OptionalPrimaryTypes]()
   private val ptWithResolutionStrategy =
-    new KissConfig(config.getConfig("underscore"), camelCaseToUnderScore).get[PrimaryTypes]
+    new KissConfig(config.getConfig("underscore"), camelCaseToUnderScore).get[PrimaryTypes]()
   private val ptWithResolutionStrategy2 =
-    new KissConfig(config.getConfig("camelcase"), underScoreToCamelCase).get[PrimaryTypesU]
+    new KissConfig(config.getConfig("camelcase"), underScoreToCamelCase).get[PrimaryTypesU]()
 
   "KissConfig " should " be able to extract Primitives (Integers,Booleans)" in {
     assert(ptConfig.myInt == 5)
