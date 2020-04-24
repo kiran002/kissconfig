@@ -1,4 +1,5 @@
 # KissConfig    
+![build](https://github.com/kiran002/kissconfig/workflows/build/badge.svg)
 
 KissConfig short for Keep it Simple Stupid Configuration, is a pure scala library for reading TypeSafe configuration
 
