@@ -2,9 +2,13 @@ package com.github.kiran002.kissconfig.config.impl
 
 import com.github.kiran002.kissconfig.config.KissConfig
 import com.github.kiran002.kissconfig.config.models.Input
+
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class BasicTypeHelperTest extends AnyFlatSpec {
   private val bth = new BasicTypeHelper()
 

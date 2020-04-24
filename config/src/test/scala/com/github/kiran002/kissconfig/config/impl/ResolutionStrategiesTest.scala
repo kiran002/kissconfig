@@ -2,7 +2,10 @@ package com.github.kiran002.kissconfig.config.impl
 
 import com.github.kiran002.kissconfig.config.impl.ResolutionStrategies._
 import org.scalatest.flatspec.AnyFlatSpec
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class ResolutionStrategiesTest extends AnyFlatSpec {
 
   val camelCaseToUnderScore = CamelCaseToUnderScore()

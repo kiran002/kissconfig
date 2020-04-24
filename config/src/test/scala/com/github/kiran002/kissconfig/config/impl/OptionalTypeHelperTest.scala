@@ -6,7 +6,10 @@ import com.github.kiran002.kissconfig.config.{KissConfig, PrimaryTypes}
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfter
 import org.scalatest.flatspec.AnyFlatSpec
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class OptionalTypeHelperTest extends AnyFlatSpec with BeforeAndAfter {
 
   private val bth = new OptionalTypeHelper()

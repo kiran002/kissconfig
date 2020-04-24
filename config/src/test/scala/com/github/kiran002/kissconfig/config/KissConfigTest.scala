@@ -3,6 +3,8 @@ package com.github.kiran002.kissconfig.config
 import com.github.kiran002.kissconfig.config.impl.ResolutionStrategies
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
 case class PrimaryTypes(myInt: Int, myString: String, myBoolean: Boolean)
 
@@ -16,7 +18,7 @@ case class OptionalPrimaryTypes(myInt: Option[Int],
 case class ListsMaps(lists: List[String], map: Map[String, String])
 
 case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
-
+@RunWith(classOf[JUnitRunner])
 class KissConfigTest extends AnyFlatSpec {
 
   private val camelCaseToUnderScore = Option(ResolutionStrategies.CamelCaseToUnderScore())
