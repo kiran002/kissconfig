@@ -26,7 +26,6 @@ class OptionalTypeHelper extends TypeHelper {
     * @return : function, that takes config object and config key as input and returns the extracted value
     */
   override def get(objType: universe.Type): Input => Any = {
-    //TODO: Change this
     val top             = objType.typeArgs.head
     val fn              = TypeHelper.get.filter(x => x.canHandle(top)).head.get(top)
     val x: Input => Any = j => Try(fn(j)).toOption
