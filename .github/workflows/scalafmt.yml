@@ -24,3 +24,5 @@ jobs:
 
     - name: Scalafmt Action
       uses: openlawteam/scalafmt-ci@v2.0.2
+      with:
+        args: --test 
