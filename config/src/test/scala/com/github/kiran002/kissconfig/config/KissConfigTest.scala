@@ -10,11 +10,12 @@ case class PrimaryTypes(myInt: Int, myString: String, myBoolean: Boolean)
 
 case class PrimaryTypesU(my_int: Int, my_string: String, my_boolean: Boolean)
 
-case class OptionalPrimaryTypes(myInt: Option[Int],
-                                myString: Option[String],
-                                myBoolean: Option[Boolean],
-                                nonExistent: Option[String])
-
+case class OptionalPrimaryTypes(
+    myInt: Option[Int],
+    myString: Option[String],
+    myBoolean: Option[Boolean],
+    nonExistent: Option[String]
+)
 case class ListsMaps(lists: List[String], map: Map[String, String])
 
 case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
