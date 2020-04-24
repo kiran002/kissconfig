@@ -1,6 +1,6 @@
 apply plugin: 'idea'
 apply plugin: 'scala'
-
+apply plugin: 'cz.alenkacz.gradle.scalafmt'
 
 repositories {
     mavenCentral()
