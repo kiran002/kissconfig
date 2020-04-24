@@ -3,7 +3,7 @@
 
 KissConfig short for Keep it Simple Stupid Configuration, is a pure scala library for reading TypeSafe configuration
 
-### Why?
+### Why? 
 
 Dealing with configurations is an every day task, KissConfig aims provide a scala friendly library.
 That helps scala developers deal with configurations as easily as possible. 
