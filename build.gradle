@@ -18,3 +18,7 @@ repositories {
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.4'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '5.2'
+}
