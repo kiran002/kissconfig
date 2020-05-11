@@ -3,7 +3,8 @@ package com.github.kiran002.kissconfig.config.api
 import com.github.kiran002.kissconfig.config.models.Input
 
 import scala.collection.mutable.ListBuffer
-import scala.reflect.runtime.universe.Type
+import scala.reflect.runtime.universe
+import scala.reflect.runtime.universe.{Type, typeOf}
 
 /**
   * Interface used to define a [[TypeHelper]].
@@ -29,6 +30,11 @@ import scala.reflect.runtime.universe.Type
   * @note More example are available under [[com.github.kiran002.kissconfig.config.impl]]
   */
 trait TypeHelper {
+
+  protected val StringType: universe.Type  = typeOf[String]
+  protected val IntegerType: universe.Type = typeOf[Int]
+  protected val BooleanType: universe.Type = typeOf[Boolean]
+  protected val DoubleType: universe.Type  = typeOf[Double]
 
   /**
     * Is the typehelper able to handle this particular type ([[objType]])

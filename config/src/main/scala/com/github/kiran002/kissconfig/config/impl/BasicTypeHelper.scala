@@ -13,13 +13,15 @@ class BasicTypeHelper extends TypeHelper {
   private val booleanExtractor: Input => Any = x => x.config.getBoolean(x.configKey.get)
   private val intExtractor: Input => Any     = x => x.config.getInt(x.configKey.get)
   private val stringExtractor: Input => Any  = x => x.config.getString(x.configKey.get)
+  private val doubleExtractor: Input => Any  = x => x.config.getDouble(x.configKey.get)
 
   //Map of supported types with their extractors
-  private val symbolToFunction: Map[universe.Symbol, Input => Any] =
+  private val symbolToFunction: Map[universe.Type, Input => Any] =
     Map(
-      universe.typeOf[Boolean].typeSymbol -> booleanExtractor,
-      universe.typeOf[Int].typeSymbol     -> intExtractor,
-      universe.typeOf[String].typeSymbol  -> stringExtractor
+      BooleanType -> booleanExtractor,
+      IntegerType -> intExtractor,
+      StringType  -> stringExtractor,
+      DoubleType  -> doubleExtractor
     )
 
   /**
@@ -28,7 +30,7 @@ class BasicTypeHelper extends TypeHelper {
     * @return : true if it can handle [[objType]] false otherwise
     */
   override def canHandle(objType: universe.Type): Boolean =
-    symbolToFunction.contains(objType.typeSymbol)
+    symbolToFunction.contains(objType)
 
   /**
     * Returns a function that can be used to extract values compatible with objType
@@ -36,5 +38,5 @@ class BasicTypeHelper extends TypeHelper {
     * @return : function, that takes config object and config key as input and returns the extracted value
     */
   override def get(objType: universe.Type): Input => Any =
-    symbolToFunction(objType.typeSymbol)
+    symbolToFunction(objType)
 }

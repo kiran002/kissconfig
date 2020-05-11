@@ -12,7 +12,6 @@ import com.github.kiran002.kissconfig.config.models.Input
 import com.typesafe.config.Config
 
 import scala.reflect.runtime.universe._
-import scala.reflect.runtime.{universe => ru}
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -36,13 +35,14 @@ class KissConfig(config: Config, resolutionStrategy: Option[ResolutionStrategy] 
     * @return     : Populated instance of type [[T]]
     */
   def get[T: TypeTag](key: Option[String] = None): T = {
+    val objType = typeOf[T]
     Try {
-      TypeHelper.get.filter(_.canHandle(ru.typeOf[T])).head
+      TypeHelper.get.filter(_.canHandle(objType)).head
     } match {
       case Success(value) =>
-        value.get(ru.typeOf[T])(Input(config, key)).asInstanceOf[T]
+        value.get(objType)(Input(config, key)).asInstanceOf[T]
       case Failure(exception) =>
-        throw KissConfigException(s"Type(${ru.typeOf[T]} currently not supported", exception)
+        throw KissConfigException(s"""Type($objType) currently not supported""", exception)
     }
   }
 
@@ -54,6 +54,6 @@ object KissConfig {
     * @tparam T: Input type parameter T
     * @return : type of [[T]]
     */
-  def get[T: TypeTag]: ru.Type = ru.typeOf[T]
+  def get[T: TypeTag]: Type = typeOf[T]
 
 }
