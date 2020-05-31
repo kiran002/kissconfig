@@ -1,16 +1,72 @@
 # KissConfig    
 ![build](https://github.com/kiran002/kissconfig/workflows/build/badge.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.kiran002/kissconfig-core_2.12.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.kiran002%22%20AND%20a:%22kissconfig-core_2.12%22)
 
-KissConfig short for Keep it Simple Stupid Configuration, is a pure scala library for reading TypeSafe configuration
+
+KissConfig (KISS + Config) is a pure scala library for reading TypeSafe configuration. modelled after the Keep it stupid simple principle.
+
+## Usage
+
+Kissconfig is currently available only for scala 2.12, but it is planned to add support for scala 2.11 and 2.13. 
+
+### Import the dependency in your project
+
+#### SBT
+```
+libraryDependencies += "com.github.kiran002" % "kissconfig-core_2.12" % "1.0.1"
+```
+
+#### Gradle
+
+```
+implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.1'
+```
+
+#### Maven
+
+```
+<dependency>
+  <groupId>com.github.kiran002</groupId>
+  <artifactId>kissconfig_2.12</artifactId>
+  <version>1.0.1</version>
+</dependency>
+```
 
 ### Why? 
 
-Dealing with configurations is an every day task, KissConfig aims provide a scala friendly library.
-That helps scala developers deal with configurations as easily as possible. 
+Dealing with configurations is an every day task and it should be simple. KissConfig aims to make this a reality built on top of LightBend Config, Define a model (case class) for the properties you need and point KissConfig to your Configuration and let it take over the messy parts. 
+
+KissConfig is a pure scala library, meaning first class support to all scala types and no need interop with Java types.
 
 ### How does it work?
 
-KissConfig uses Scala reflection to determine fields and their types in runtime and extracts configuration using these fields name
+KissConfig, just requires two inputs 
+
+  1. the configuration and 
+  2. the model you want to populate,
+  
+Using Scala reflection KissConfig inspects each field (type and name) in runtime, the field name is used the source of the configuration and type is used to determine how the configuration will be extracted.
+
+Example
+
+The following is a sample model for a Person,
+
+```scala
+case class Person(name:String,age:Int)
+```
+and this is how its corresponding configuration looks like
+```hocon
+{
+name = "John"
+age = 34
+}
+```
+
+field | key | extraction method
+------|------|-------------------
+name | name | getString
+age | age | getInteger
+
 
 ### Which types does KissConfig support? 
 
@@ -41,7 +97,6 @@ Configuration can be list of Strings, Integers, Booleans
    ```
 
 Configuration can be maps (key value pairs)
-_however there is one assumption that the keys are always strings_
 
 ```hocon
 map = {
