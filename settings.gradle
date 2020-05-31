@@ -1,7 +1,0 @@
-rootProject.name = 'kissconfig'
-include("core","examples")
-// Prefix all projects with sparkling-water name
-rootProject.children.each { project ->
-    project.name = rootProject.name + "-" + project.name
-}
-
