@@ -1,4 +1,4 @@
-
+name := "kissconfig"
 lazy val commonSettings = Seq(
     organization := "com.github.kiran002",
     version := "1.0.0",
