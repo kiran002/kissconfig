@@ -1,5 +1,6 @@
 # KissConfig    
 ![build](https://github.com/kiran002/kissconfig/workflows/build/badge.svg)
+[![codecov](https://codecov.io/gh/kiran002/kissconfig/branch/master/graph/badge.svg)](https://codecov.io/gh/kiran002/kissconfig)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.kiran002/kissconfig-core_2.12.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.kiran002%22%20AND%20a:%22kissconfig-core_2.12%22)
 
 
