@@ -6,38 +6,13 @@
 
 KissConfig (KISS + Config) is a pure scala library for reading TypeSafe configuration. modelled after the Keep it stupid simple principle.
 
-## Usage
-
-Kissconfig is currently available only for scala 2.12, but it is planned to add support for scala 2.11 and 2.13. 
-
-### Import the dependency in your project
-
-#### SBT
-```
-libraryDependencies += "com.github.kiran002" % "kissconfig-core_2.12" % "1.0.1"
-```
-
-#### Gradle
-
-```
-implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.1'
-```
-
-#### Maven
-
-```
-<dependency>
-  <groupId>com.github.kiran002</groupId>
-  <artifactId>kissconfig_2.12</artifactId>
-  <version>1.0.1</version>
-</dependency>
-```
-
 ### Why? 
 
 Dealing with configurations is an every day task and it should be simple. KissConfig aims to make this a reality built on top of LightBend Config, Define a model (case class) for the properties you need and point KissConfig to your Configuration and let it take over the messy parts. 
 
 KissConfig is a pure scala library, meaning first class support to all scala types and no need interop with Java types.
+
+
 
 ### How does it work?
 
@@ -152,5 +127,31 @@ camelcase = {
   myString = "myString"
   myBoolean = true
 }
+```
+## Usage
+
+Kissconfig is currently available only for scala 2.12, but it is planned to add support for scala 2.11 and 2.13. 
+
+### Import the dependency in your project
+
+#### SBT
+```
+libraryDependencies += "com.github.kiran002" % "kissconfig-core_2.12" % "1.0.1"
+```
+
+#### Gradle
+
+```
+implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.1'
+```
+
+#### Maven
+
+```
+<dependency>
+  <groupId>com.github.kiran002</groupId>
+  <artifactId>kissconfig_2.12</artifactId>
+  <version>1.0.1</version>
+</dependency>
 ```
 
