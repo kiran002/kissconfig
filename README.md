@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.kiran002/kissconfig-core_2.12.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.kiran002%22%20AND%20a:%22kissconfig-core_2.12%22)
 
 
-KissConfig (KISS + Config) is a pure scala library for reading TypeSafe configuration. modelled after the Keep it stupid simple principle.
+KissConfig (![KISS](https://en.wikipedia.org/wiki/KISS_principle) + Config) is a pure scala library for reading TypeSafe configuration. modelled after the Keep it stupid simple principle.
 
 ### Why? 
 
