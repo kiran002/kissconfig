@@ -20,5 +20,10 @@ jobs:
     - name: Format check
       run: sbt scalafmtCheck
     - name: Run tests
-      run: sbt test
-    
+      run: sbt clean coverage test coverageReport
+    # Runs a single command using the runners shell
+    - name: Codecov
+      uses: codecov/codecov-action@v1.0.7
+      with:
+        # User defined upload name. Visible in Codecov UI
+        name: kissconfig # optional
