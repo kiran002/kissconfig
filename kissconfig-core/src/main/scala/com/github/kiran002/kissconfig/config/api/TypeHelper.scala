@@ -1,5 +1,11 @@
 package com.github.kiran002.kissconfig.config.api
 
+import com.github.kiran002.kissconfig.config.impl.{
+  BasicTypeHelper,
+  CaseClassTypeHelper,
+  CollectionTypeHelper,
+  OptionalTypeHelper
+}
 import com.github.kiran002.kissconfig.config.models.Input
 
 import scala.collection.mutable.ListBuffer
@@ -84,5 +90,10 @@ object TypeHelper {
     * @return : list of all Registered [[TypeHelper]]'s in reverse order
     */
   def get: List[TypeHelper] = listBuffer.toList.reverse
+
+  register(new BasicTypeHelper)
+  register(new OptionalTypeHelper)
+  register(new CollectionTypeHelper)
+  register(new CaseClassTypeHelper)
 
 }

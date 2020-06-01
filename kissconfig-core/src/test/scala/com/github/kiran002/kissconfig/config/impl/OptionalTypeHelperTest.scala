@@ -15,10 +15,7 @@ class OptionalTypeHelperTest extends AnyFlatSpec with BeforeAndAfter {
   private val bth = new OptionalTypeHelper()
 
   before {
-    TypeHelper.register(new BasicTypeHelper)
-    TypeHelper.register(new CollectionTypeHelper)
-    TypeHelper.register(new CaseClassTypeHelper)
-    ResolutionStrategy.register(None)
+    ResolutionStrategy.clear()
   }
 
   private val intSymbol          = KissConfig.get[Int]
