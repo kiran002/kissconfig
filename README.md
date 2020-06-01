@@ -158,7 +158,7 @@ implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.1'
 
 This project is licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
-### Contributing
+## Contributing
 
 If you find bugs while using KissConfig, please feel free to create an issue or a PR to patch the bug. If you would like to improve the software in any way (code, documentation, tests), please free to get in touch with mel
 
