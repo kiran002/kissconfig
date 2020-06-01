@@ -1,5 +1,6 @@
 package com.github.kiran002.kissconfig.config
 
+import com.github.kiran002.kissconfig.config.api.ResolutionStrategy
 import com.github.kiran002.kissconfig.config.impl.ResolutionStrategies
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
@@ -16,23 +17,19 @@ case class OptionalPrimaryTypes(
     myBoolean: Option[Boolean],
     nonExistent: Option[String]
 )
+
 case class ListsMaps(lists: List[String], map: Map[String, String])
 
 case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
+
 @RunWith(classOf[JUnitRunner])
 class KissConfigTest extends AnyFlatSpec {
 
-  private val camelCaseToUnderScore = Option(ResolutionStrategies.CamelCaseToUnderScore())
-  private val underScoreToCamelCase = Option(ResolutionStrategies.UnderScoreToCamelCase())
-  private val config                = ConfigFactory.defaultApplication()
-  private val kc                    = new KissConfig(config)
-  private val ptConfig              = kc.get[PrimaryTypes]()
-  private val lmConfig              = kc.get[ListsMaps]()
-  private val optConfig             = kc.get[OptionalPrimaryTypes]()
-  private val ptWithResolutionStrategy =
-    new KissConfig(config.getConfig("underscore"), camelCaseToUnderScore).get[PrimaryTypes]()
-  private val ptWithResolutionStrategy2 =
-    new KissConfig(config.getConfig("camelcase"), underScoreToCamelCase).get[PrimaryTypesU]()
+  private val config    = ConfigFactory.defaultApplication()
+  private val kc        = new KissConfig(config)
+  private val ptConfig  = kc.get[PrimaryTypes]()
+  private val lmConfig  = kc.get[ListsMaps]()
+  private val optConfig = kc.get[OptionalPrimaryTypes]()
 
   "KissConfig " should " be able to extract Primitives (Integers,Booleans)" in {
     assert(ptConfig.myInt == 5)
@@ -63,14 +60,22 @@ class KissConfigTest extends AnyFlatSpec {
   }
 
   it should " be able to resolve using CamelCaseToUnderScore Strategy" in {
+    ResolutionStrategy.register(Option(ResolutionStrategies.CamelCaseToUnderScore()))
+    val ptWithResolutionStrategy =
+      new KissConfig(config.getConfig("underscore")).get[PrimaryTypes]()
     assert(ptWithResolutionStrategy.myInt == 5)
     assert(ptWithResolutionStrategy.myBoolean)
     assert(ptWithResolutionStrategy.myString.equals("myString"))
+    ResolutionStrategy.clear()
   }
 
   it should " be able to resolve using UnderScoreToCamelCase Strategy" in {
+    ResolutionStrategy.register(Option(ResolutionStrategies.UnderScoreToCamelCase()))
+    val ptWithResolutionStrategy2 =
+      new KissConfig(config.getConfig("camelcase")).get[PrimaryTypesU]()
     assert(ptWithResolutionStrategy2.my_int == 5)
     assert(ptWithResolutionStrategy2.my_boolean)
     assert(ptWithResolutionStrategy2.my_string.equals("myString"))
+    ResolutionStrategy.clear()
   }
 }

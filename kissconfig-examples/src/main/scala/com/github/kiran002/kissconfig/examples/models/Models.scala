@@ -6,6 +6,8 @@ case class ListsMaps(lists: List[String], map: Map[String, String])
 
 case class CustomTypes(pt: PrimaryTypes, lm: ListsMaps)
 
+case class CustomTypes2(pt: Option[PrimaryTypes],pt2: Option[PrimaryTypes], lm: ListsMaps)
+
 case class Lists(listsInt: List[Int], listsDouble: List[Double])
 
 case class BooleanMaps(ma: Map[String, Boolean])

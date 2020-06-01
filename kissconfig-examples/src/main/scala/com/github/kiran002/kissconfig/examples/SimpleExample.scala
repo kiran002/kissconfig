@@ -1,6 +1,8 @@
 package com.github.kiran002.kissconfig.examples
 
 import com.github.kiran002.kissconfig.config.KissConfig
+import com.github.kiran002.kissconfig.config.api.ResolutionStrategy
+import com.github.kiran002.kissconfig.config.impl.ResolutionStrategies
 import com.github.kiran002.kissconfig.examples.models._
 import com.typesafe.config.ConfigFactory
 
@@ -35,4 +37,20 @@ object SimpleExample extends App {
   println(s"Sum of Double : ${lis.listsDouble.sum}")
   println(s"Lists of Int : ${lis.listsInt}")
   println(s"Max of Int : ${lis.listsInt.max}")
+
+
+  val customTypes2        = kc.get[CustomTypes2]()
+
+  println(customTypes.pt equals customTypes2.pt.get)
+
+  ResolutionStrategy.register(Option(ResolutionStrategies.CamelCaseToUnderScore()))
+
+
+  val bc = kc.get[PrimaryTypes](Some("underscore"))
+
+  println(bc.myBoolean)
+  println(bc.myInt)
+  println(bc.myString)
+
+
 }
