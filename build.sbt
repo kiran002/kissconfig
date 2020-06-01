@@ -1,7 +1,7 @@
 name := "kissconfig"
 lazy val commonSettings = Seq(
   organization := "com.github.kiran002",
-  version := "1.0.0",
+  version := "1.0.1",
   scalaVersion := "2.12.10",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
   resolvers += Resolver.typesafeIvyRepo("releases"),
