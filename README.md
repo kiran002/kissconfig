@@ -3,6 +3,7 @@
 [![codecov](https://codecov.io/gh/kiran002/kissconfig/branch/master/graph/badge.svg)](https://codecov.io/gh/kiran002/kissconfig)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.kiran002/kissconfig-core_2.12.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.kiran002%22%20AND%20a:%22kissconfig-core_2.12%22)
 
+## Intro
 
 KissConfig ([KISS](https://en.wikipedia.org/wiki/KISS_principle) + Config) is a pure scala library for reading TypeSafe configuration. modelled after the Keep it stupid simple principle.
 
@@ -38,7 +39,7 @@ age = 34
 }
 ```
 
-field | key | extraction method
+Field | Key | Extraction method
 ------|------|-------------------
 name | name | getString
 age | age | getInteger
@@ -46,14 +47,14 @@ age | age | getInteger
 
 ### Which types does KissConfig support? 
 
-The idea behind KissConfig is not to support every type available, but only the types types that are most used in configurations. 
-
-Having said that, KissConfig currently supports the following types
+The idea behind KissConfig is not to support every type available, but only the types types that are most used in configurations. KissConfig currently supports the following types,
 
  1. Primitive types + Strings
  2. Collections (Lists,Maps)
  3. Custom case classes
  4. Optional Types
+
+_if you have a valid suggestion for some other types, please create an issue with the proper usecase and we can discuss it._
 
 #### Config examples
 
@@ -106,28 +107,27 @@ lm = {
   }
 }
 ```
+It is most often the case, that we want to follow different naming conventions in code and different naming conventions in Configuration. You should have the flexibility to chose the conventions that work the best for you, Using a resolution strategy you are able to define how a field name (in Scala) should be translated to its corresponding Key in the Configuration.
 
-you decide the naming convention of your properties
-just provide how the resolution between fieldname --> configKey is done
-the rest is taken care by KissConfig
+KissConfig provides two such conversions out of the box,
 
-KissConfig proivdes (camelCase to underscore) conversion out of the box
-```hocon
-underscore = {
-  my_int = 5
-  my_string = "myString"
-  my_boolean = true
-}
-```
-
-It also provides (underscore to camelCase) conversion
-```hocon
-camelcase = {
-  myInt = 5
-  myString = "myString"
-  myBoolean = true
-}
-```
+  1. camelCase to underscore 
+      ```hocon
+      underscore = {
+        my_int = 5
+        my_string = "myString"
+        my_boolean = true
+      }
+      ```
+    
+  2. underscore to camelCase
+        ```hocon
+        camelcase = {
+          myInt = 5
+          myString = "myString"
+          myBoolean = true
+        }
+        ```
 ## Usage
 
 Kissconfig is currently available only for scala 2.12, but it is planned to add support for scala 2.11 and 2.13. 
