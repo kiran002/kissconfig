@@ -136,13 +136,20 @@ Kissconfig is currently available only for scala 2.12, but it is planned to add 
 
 #### SBT
 ```
-libraryDependencies += "com.github.kiran002" % "kissconfig-core_2.12" % "1.0.1"
+libraryDependencies += "com.github.kiran002" %% "kissconfig-core" % "1.0.2"
 ```
 
 #### Gradle
 
 ```
-implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.1'
+for scala 2.11
+implementation 'com.github.kiran002:kissconfig-core_2.11:1.0.2'
+
+for scala 2.12
+implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.2'
+
+for scala 2.13
+implementation 'com.github.kiran002:kissconfig-core_2.13:1.0.2'
 ```
 
 #### Maven
@@ -150,8 +157,8 @@ implementation 'com.github.kiran002:kissconfig-core_2.12:1.0.1'
 ```
 <dependency>
   <groupId>com.github.kiran002</groupId>
-  <artifactId>kissconfig_2.12</artifactId>
-  <version>1.0.1</version>
+  <artifactId>kissconfig_<<scala_version>>/artifactId>
+  <version>1.0.2</version>
 </dependency>
 ```
 ## License
