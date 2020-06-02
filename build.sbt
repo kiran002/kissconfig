@@ -1,17 +1,18 @@
 name := "kissconfig"
 lazy val commonSettings = Seq(
   organization := "com.github.kiran002",
-  version := "1.0.1",
-  scalaVersion := "2.12.10",
-  crossScalaVersions := Seq("2.11.12", scalaVersion.value),
+  version := "1.0.2",
+  scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Ywarn-value-discard"),
+  scalaVersion := "2.13.1",
+  crossScalaVersions := Seq("2.11.12", "2.12.10",scalaVersion.value),
   resolvers += Resolver.typesafeIvyRepo("releases"),
   libraryDependencies += "com.typesafe"   % "config"         % "1.4.0",
   libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
   libraryDependencies += "org.scala-lang" % "scala-reflect"  % scalaVersion.value,
   // for testing
-  libraryDependencies += "org.scalatest"     % "scalatest_2.12"  % "3.1.1"         % "test",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0-M1" %  "test",
   libraryDependencies += "junit"             % "junit"           % "4.12"          % "test",
-  libraryDependencies += "org.scalatestplus" % "junit-4-12_2.12" % "3.3.0.0-SNAP2" % "test",
+  libraryDependencies += "org.scalatestplus" %% "junit-4-12" % "3.3.0.0-SNAP2" % "test",
   publishMavenStyle := true,
   publishArtifact in Test := false,
   publishTo := Some(
