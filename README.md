@@ -130,8 +130,6 @@ KissConfig provides two such conversions out of the box,
         ```
 ## Usage
 
-Kissconfig is currently available only for scala 2.12, but it is planned to add support for scala 2.11 and 2.13. 
-
 ### Import the dependency in your project
 
 #### SBT
