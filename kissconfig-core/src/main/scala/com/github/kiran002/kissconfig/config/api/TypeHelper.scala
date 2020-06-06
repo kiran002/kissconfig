@@ -39,6 +39,8 @@ trait TypeHelper {
 
   protected val StringType: universe.Type  = typeOf[String]
   protected val IntegerType: universe.Type = typeOf[Int]
+  protected val LongType: universe.Type    = typeOf[Long]
+  protected val ShortType: universe.Type   = typeOf[Short]
   protected val BooleanType: universe.Type = typeOf[Boolean]
   protected val DoubleType: universe.Type  = typeOf[Double]
 
