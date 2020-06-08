@@ -9,6 +9,7 @@ import org.scalatestplus.junit.JUnitRunner
 class ResolutionStrategiesTest extends AnyFlatSpec {
 
   val camelCaseToUnderScore = CamelCaseToUnderScore()
+  val camelCaseToDotCase    = CamelCaseToDotCase()
   val underScoreToCamelCase = UnderScoreToCamelCase()
 
   "CamelCaseToUnderscore strategy " should " convert camelcase to _" in {
@@ -28,5 +29,15 @@ class ResolutionStrategiesTest extends AnyFlatSpec {
   it should " ignore the first character" in {
     val str = underScoreToCamelCase.resolve("_test_my_case")
     assert(str.equals("_testMyCase"))
+  }
+
+  "CamelCaseToDotCase strategy " should " convert camelcase to dotcase" in {
+    val str = camelCaseToDotCase.resolve("testMyCase")
+    assert(str.equals("test.my.case"))
+  }
+
+  it should " not do anything incase string is lowercase" in {
+    val str = camelCaseToDotCase.resolve("test")
+    assert(str.equals("test"))
   }
 }

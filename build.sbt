@@ -4,14 +4,14 @@ lazy val commonSettings = Seq(
   version := "1.0.2",
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Ywarn-value-discard"),
   scalaVersion := "2.13.1",
-  crossScalaVersions := Seq("2.11.12", "2.12.10",scalaVersion.value),
+  crossScalaVersions := Seq("2.11.12", "2.12.10", scalaVersion.value),
   resolvers += Resolver.typesafeIvyRepo("releases"),
   libraryDependencies += "com.typesafe"   % "config"         % "1.4.0",
   libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
   libraryDependencies += "org.scala-lang" % "scala-reflect"  % scalaVersion.value,
   // for testing
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0-M1" %  "test",
-  libraryDependencies += "junit"             % "junit"           % "4.12"          % "test",
+  libraryDependencies += "org.scalatest"     %% "scalatest"  % "3.2.0-M1"      % "test",
+  libraryDependencies += "junit"              % "junit"      % "4.12"          % "test",
   libraryDependencies += "org.scalatestplus" %% "junit-4-12" % "3.3.0.0-SNAP2" % "test",
   publishMavenStyle := true,
   publishArtifact in Test := false,
@@ -45,7 +45,8 @@ lazy val kissconfig = (project in file("."))
 
 lazy val `kissconfig-core` = (project in file("kissconfig-core"))
   .settings(
-    commonSettings
+    commonSettings,
+    parallelExecution := false
   )
 
 lazy val `kissconfig-examples` = (project in file("kissconfig-examples"))

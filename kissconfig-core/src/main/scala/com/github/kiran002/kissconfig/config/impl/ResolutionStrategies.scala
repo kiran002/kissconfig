@@ -49,4 +49,24 @@ object ResolutionStrategies {
       tail.foldLeft(str)((A, B) => A + (B.head.toUpper) + B.tail.toLowerCase)
     }
   }
+
+  /**
+    * [[CamelCaseToDotCase]] defines the resolution strategy to convert a string from camelcase to dotcase .
+    * @example
+    *        a string like 'camelCase' is transformed to `camel_case`
+    *
+   */
+  case class CamelCaseToDotCase() extends ResolutionStrategy {
+
+    /**
+      * The resolve method translates a field name from its scala convention to the hocon convention
+      * @param str          : The name of the field in the case class
+      * @return output string : the configuration key,
+      *         which should be used to extract the value from the config object
+      */
+    override def resolve(str: String): String = {
+      str.flatMap(char => if (char.isUpper) Seq('.', char.toLower) else Seq(char)).mkString
+    }
+  }
+
 }
