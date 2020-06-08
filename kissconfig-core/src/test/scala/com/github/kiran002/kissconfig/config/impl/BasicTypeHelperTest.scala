@@ -13,11 +13,11 @@ class BasicTypeHelperTest extends AnyFlatSpec {
   private val bth = new BasicTypeHelper()
 
   private val intSymbol    = KissConfig.get[Int]
-  private val shortSymbol    = KissConfig.get[Short]
-  private val longSymbol    = KissConfig.get[Long]
+  private val shortSymbol  = KissConfig.get[Short]
+  private val longSymbol   = KissConfig.get[Long]
   private val stringSymbol = KissConfig.get[String]
   private val boolSymbol   = KissConfig.get[Boolean]
-  private val doubleSymbol   = KissConfig.get[Double]
+  private val doubleSymbol = KissConfig.get[Double]
   private val listSymbol   = KissConfig.get[List[String]]
 
   "BasicTypeHelper" should " handle Short/Int/Long/Double/String/Boolean" in {
@@ -39,16 +39,16 @@ class BasicTypeHelperTest extends AnyFlatSpec {
     val myInt     = bth.get(intSymbol)(Input(config, Some("myInt")))
     val myBoolean = bth.get(boolSymbol)(Input(config, Some("myBoolean")))
     val myString  = bth.get(stringSymbol)(Input(config, Some("myString")))
-    val myShort  = bth.get(shortSymbol)(Input(config, Some("myShort")))
-    val myLong  = bth.get(longSymbol)(Input(config, Some("myLong")))
+    val myShort   = bth.get(shortSymbol)(Input(config, Some("myShort")))
+    val myLong    = bth.get(longSymbol)(Input(config, Some("myLong")))
     val myDouble  = bth.get(doubleSymbol)(Input(config, Some("myDouble")))
 
     assert(myInt == 5)
     assert(myDouble == 1.5)
     assert(myBoolean == true)
     assert(myString.equals("myString"))
-    assert(myShort==6)
-    assert(myLong==92233720368547758L)
+    assert(myShort == 6)
+    assert(myLong == 92233720368547758L)
   }
 
 }
