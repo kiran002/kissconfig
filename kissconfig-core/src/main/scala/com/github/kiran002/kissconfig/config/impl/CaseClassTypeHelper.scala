@@ -29,7 +29,7 @@ class CaseClassTypeHelper extends TypeHelper {
   override def get(objType: universe.Type): Input => Any = { ip =>
     {
       val config            = if (ip.configKey.isDefined) ip.config.getConfig(ip.configKey.get) else ip.config
-      val tuplesOfFields    = getListOfFields(objType,ip.prefix)
+      val tuplesOfFields    = getListOfFields(objType, ip.prefix)
       val runtimeMirror     = universe.runtimeMirror(getClass.getClassLoader)
       val classMirror       = runtimeMirror.reflectClass(objType.typeSymbol.asClass)
       val constructorSymbol = objType.decl(universe.termNames.CONSTRUCTOR).asMethod
