@@ -21,13 +21,13 @@ class KissConfig(config: Config) {
     * @tparam T : Type Param of the input class that should be populated with [[config]]
     * @return : Populated instance of type [[T]]
     */
-  def get[T: TypeTag](key: Option[String] = None): T = {
+  def get[T: TypeTag](key: Option[String] = None, prefix: Option[String] = None): T = {
     val objType = typeOf[T]
     Try {
       TypeHelper.get.filter(_.canHandle(objType)).head
     } match {
       case Success(value) =>
-        value.get(objType)(Input(config, key)).asInstanceOf[T]
+        value.get(objType)(Input(config, key, prefix)).asInstanceOf[T]
       case Failure(exception) =>
         throw KissConfigException(s"""Type($objType) currently not supported""", exception)
     }

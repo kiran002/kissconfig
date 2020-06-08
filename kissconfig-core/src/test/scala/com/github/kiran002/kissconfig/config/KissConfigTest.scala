@@ -88,4 +88,14 @@ class KissConfigTest extends AnyFlatSpec {
     assert(ptWithResolutionStrategy2.myString.equals("myString"))
     ResolutionStrategy.clear()
   }
+
+  it should " be able to resolve using prefix" in {
+    ResolutionStrategy.register(Option(ResolutionStrategies.CamelCaseToDotCase()))
+    val ptWithResolutionStrategy2 =
+      new KissConfig(config).get[PrimaryTypes](prefix = Some("prefix"))
+    assert(ptWithResolutionStrategy2.myInt == 5)
+    assert(ptWithResolutionStrategy2.myBoolean)
+    assert(ptWithResolutionStrategy2.myString.equals("myString"))
+    ResolutionStrategy.clear()
+  }
 }

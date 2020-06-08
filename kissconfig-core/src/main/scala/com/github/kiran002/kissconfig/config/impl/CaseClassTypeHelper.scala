@@ -29,7 +29,7 @@ class CaseClassTypeHelper extends TypeHelper {
   override def get(objType: universe.Type): Input => Any = { ip =>
     {
       val config            = if (ip.configKey.isDefined) ip.config.getConfig(ip.configKey.get) else ip.config
-      val tuplesOfFields    = getListOfFields(objType)
+      val tuplesOfFields    = getListOfFields(objType,ip.prefix)
       val runtimeMirror     = universe.runtimeMirror(getClass.getClassLoader)
       val classMirror       = runtimeMirror.reflectClass(objType.typeSymbol.asClass)
       val constructorSymbol = objType.decl(universe.termNames.CONSTRUCTOR).asMethod
@@ -58,9 +58,13 @@ class CaseClassTypeHelper extends TypeHelper {
     * @param ip: Input case class [[scala.reflect.runtime.universe.Type]]
     * @return list of sorted fields (exactly as defined in the case class definition
     */
-  private def getListOfFields(ip: universe.Type): List[FieldInfo] =
+  private def getListOfFields(ip: universe.Type, prefix: Option[String] = None): List[FieldInfo] =
     ip.members.sorted.collect {
       case m: MethodSymbol if m.isCaseAccessor =>
-        FieldInfo(m.name.toString, m.returnType)
+        val fieldName = m.name.toString
+        val string =
+          if (prefix.isEmpty) fieldName
+          else prefix.get + fieldName.charAt(0).toUpper + fieldName.substring(1)
+        FieldInfo(string, m.returnType)
     }
 }

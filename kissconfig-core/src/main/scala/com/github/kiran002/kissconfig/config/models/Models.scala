@@ -16,4 +16,4 @@ case class FieldInfo(name: String, typ: Type)
   * @param config : Input source (Config Object)
   * @param configKey: Input Key (used to extract value from [[config]]
   */
-case class Input(config: Config, configKey: Option[String])
+case class Input(config: Config, configKey: Option[String], prefix: Option[String] = None)
